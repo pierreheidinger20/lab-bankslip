@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8"/>
+
+    <style>
+
+        @page {
+            size: A4 landscape;
+            margin: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 9px;
+            color: #222222;
+        }
+
+        .ticket {
+            width: 100%;
+            border: 1px solid #777;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid #888;
+            padding: 5px;
+            vertical-align: top;
+        }
+
+        .no-border {
+            border: none;
+        }
+
+        /* =========================
+           HEADER
+           ========================= */
+
+        .header {
+            height: 65px;
+        }
+
+        .logo-cell {
+            width: 42%;
+            border: none;
+            vertical-align: middle;
+        }
+
+        .institution {
+            font-size: 17px;
+            font-weight: bold;
+            color: #4169e1;
+        }
+
+        .institution-code {
+            margin-top: 4px;
+            font-size: 9px;
+            color: #222;
+        }
+
+        .bank-code {
+            width: 10%;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .document-line {
+            width: 48%;
+            font-size: 9px;
+            vertical-align: middle;
+        }
+
+        /* =========================
+           LABELS
+           ========================= */
+
+        .label {
+            display: block;
+            font-size: 7px;
+            color: #777;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .value {
+            font-size: 10px;
+        }
+
+        .value-bold {
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        /* =========================
+           PAYMENT / NUMBER
+           ========================= */
+
+        .payment-place {
+            width: 70%;
+        }
+
+        .our-number {
+            width: 30%;
+        }
+
+        /* =========================
+           MAIN DATA
+           ========================= */
+
+        .beneficiary {
+            width: 35%;
+        }
+
+        .payer-guarantor {
+            width: 30%;
+        }
+
+        .due-date {
+            width: 15%;
+        }
+
+        .document-value {
+            width: 20%;
+        }
+
+        /* =========================
+           INSTRUCTIONS
+           ========================= */
+
+        .instructions {
+            height: 105px;
+        }
+
+        .instructions-cell {
+            width: 70%;
+        }
+
+        .penalties {
+            width: 30%;
+        }
+
+        /* =========================
+           CLIENT
+           ========================= */
+
+        .client {
+            height: 55px;
+        }
+
+        .client-cell {
+            width: 70%;
+        }
+
+        .amount-cell {
+            width: 30%;
+        }
+
+        /* =========================
+           BOTTOM
+           ========================= */
+
+        .bottom {
+            height: 105px;
+        }
+
+        .digitable {
+            width: 55%;
+            text-align: center;
+            vertical-align: bottom;
+        }
+
+        .mechanical-authentication {
+            width: 45%;
+            text-align: center;
+            vertical-align: middle;
+            color: #999;
+        }
+
+        .digitable-title {
+            font-size: 8px;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .digitable-value {
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            font-weight: bold;
+        }
+
+        .barcode {
+            margin-top: 10px;
+            width: 100%;
+            height: 55px;
+        }
+
+        .barcode img {
+            width: 90%;
+            height: 50px;
+        }
+
+        .small {
+            font-size: 7px;
+        }
+
+        .separator {
+            border-top: 2px solid #555;
+            margin: 5px 0;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="ticket">
+
+    <!-- ======================================================
+         HEADER
+         ====================================================== -->
+
+    <table>
+
+        <tr class="header">
+
+            <td class="logo-cell">
+
+                <div class="institution">
+                    <span th:text="${bankSlip.institutionName}">
+                        Marca da Instituição de Pagamento
+                    </span>
+                </div>
+
+                <div class="institution-code"
+                     th:text="${bankSlip.institutionDocument}">
+                    CNPJ: 40.192.025/0001-00
+                </div>
+
+            </td>
+
+            <td class="bank-code"
+                th:text="${bankSlip.bankCode}">
+                401
+            </td>
+
+            <td class="document-line">
+
+                <strong>
+                    <span th:text="${bankSlip.barcode}">
+                        401920250872000000900002199032
+                    </span>
+                </strong>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+
+    <!-- ======================================================
+         PAYMENT PLACE / OUR NUMBER
+         ====================================================== -->
+
+    <table>
+
+        <tr>
+
+            <td class="payment-place">
+
+                <span class="label">
+                    Local de pagamento
+                </span>
+
+                <span class="value"
+                      th:text="${bankSlip.paymentPlace}">
+                    Pagável em qualquer banco ou lotérica.
+                </span>
+
+            </td>
+
+            <td class="our-number">
+
+                <span class="label">
+                    Nosso número
+                </span>
+
+                <span class="value-bold"
+                      th:text="${bankSlip.ourNumber}">
+                    4009125027897
+                </span>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+
+    <!-- ======================================================
+         BENEFICIARY / PAYER / DUE DATE / VALUE
+         ====================================================== -->
+
+    <table>
+
+        <tr>
+
+            <td class="beneficiary">
+
+                <span class="label">
+                    Beneficiário
+                </span>
+
+                <span class="value-bold"
+                      th:text="${bankSlip.beneficiaryName}">
+                    ACME SOFTWARE LTDA
+                </span>
+
+                <br/>
+
+                <span class="small">
+                    CNPJ:
+                </span>
+
+                <span class="small"
+                      th:text="${bankSlip.beneficiaryDocument}">
+                    12.345.678/0001-90
+                </span>
+
+            </td>
+
+
+            <td class="payer-guarantor">
+
+                <span class="label">
+                    Sacador/Avalista
+                </span>
+
+                <span class="value"
+                      th:text="${bankSlip.payerName}">
+                    João da Silva
+                </span>
+
+                <br/>
+
+                <span class="label">
+                    Nº do documento
+                </span>
+
+                <span class="value"
+                      th:text="${bankSlip.documentNumber}">
+                    DOC-2026-000001
+                </span>
+
+            </td>
+
+
+            <td class="due-date">
+
+                <span class="label">
+                    Vencimento
+                </span>
+
+                <span class="value-bold"
+                      th:text="${bankSlip.dueDate}">
+                    10/10/2026
+                </span>
+
+            </td>
+
+
+            <td class="document-value">
+
+                <span class="label">
+                    Valor do documento
+                </span>
+
+                <span class="value-bold">
+                    R$
+                    <span th:text="${bankSlip.amount}">
+                        250,50
+                    </span>
+                </span>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+
+    <!-- ======================================================
+         INSTRUCTIONS
+         ====================================================== -->
+
+    <table>
+
+        <tr class="instructions">
+
+            <td class="instructions-cell">
+
+                <span class="label">
+                    Instruções
+                </span>
+
+                <br/>
+
+                <span th:text="${bankSlip.instructions}">
+                    Não receber após o vencimento.
+                </span>
+
+            </td>
+
+
+            <td class="penalties">
+
+                <span class="label">
+                    Multa / Juros
+                </span>
+
+                <br/>
+
+                <strong>
+                    Multa:
+                </strong>
+
+                R$
+                <span th:text="${bankSlip.discount}">
+                    0,00
+                </span>
+
+                <br/>
+
+                <strong>
+                    Juros:
+                </strong>
+
+                R$
+                <span th:text="${bankSlip.interest}">
+                    0,00
+                </span>
+
+                <br/><br/>
+
+                <span class="label">
+                    Valor a pagar
+                </span>
+
+                <strong>
+                    R$
+                    <span th:text="${bankSlip.chargedAmount}">
+                        250,50
+                    </span>
+                </strong>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+
+    <!-- ======================================================
+         CLIENT
+         ====================================================== -->
+
+    <table>
+
+        <tr class="client">
+
+            <td class="client-cell">
+
+                <span class="label">
+                    Cliente
+                </span>
+
+                <strong
+                        th:text="${bankSlip.payerName}">
+                    João da Silva
+                </strong>
+
+                -
+                CPF/CNPJ
+
+                <span th:text="${bankSlip.payerDocument}">
+                    123.456.789-09
+                </span>
+
+                <br/>
+
+                <span class="small"
+                      th:text="${bankSlip.customerId}">
+                    customer-12345
+                </span>
+
+            </td>
+
+
+            <td class="amount-cell">
+
+                <span class="label">
+                    Valor a pagar
+                </span>
+
+                <strong>
+                    R$
+                    <span th:text="${bankSlip.chargedAmount}">
+                        250,50
+                    </span>
+                </strong>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+
+    <!-- ======================================================
+         BOTTOM
+         ====================================================== -->
+
+    <table>
+
+        <tr class="bottom">
+
+            <td class="digitable">
+
+                <div class="digitable-title">
+                    Linha Digitável
+                </div>
+
+                <div class="digitable-value"
+                     th:text="${bankSlip.digitableLine}">
+                    00197718613940500000100000000001100000000025050
+                </div>
+
+                <div class="barcode">
+
+                    <img th:src="${barcodeImage}"
+                         alt="Código de barras"/>
+
+                </div>
+
+            </td>
+
+
+            <td class="mechanical-authentication">
+
+                <span>
+                    AUTENTICAÇÃO MECÂNICA
+                </span>
+
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+</body>
+</html>
